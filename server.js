@@ -5,6 +5,7 @@ const { connectToDb, getDb } = require('./db');
 const PORT = 3000;
 
 const app = express();
+app.use(express.json());
 
 let db;
 
@@ -53,6 +54,28 @@ app.delete('/movies/:id', (req, res) => {
   if (ObjectID.isValid(req.params.id)) {
     db.collection('movies')
       .deleteOne({ _id: ObjectID(req.params.id) })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch(() => handleError(res, 'Something goes wrong...'));
+  } else {
+    handleError(res, 'Wrong id');
+  }
+});
+
+app.post('/movies', (req, res) => {
+  db.collection('movies')
+    .insertOne(req.body)
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch(() => handleError(res, 'Something goes wrong...'));
+});
+
+app.patch('/movies/:id', (req, res) => {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection('movies')
+      .updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body })
       .then((result) => {
         res.status(200).json(result);
       })
