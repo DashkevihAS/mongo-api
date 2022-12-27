@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const movieSchema = new Schema({
@@ -11,7 +10,7 @@ const movieSchema = new Schema({
     type: String,
     required: true,
   },
-  title: {
+  year: {
     type: Number,
     required: true,
   },
@@ -21,14 +20,8 @@ const movieSchema = new Schema({
     hours: Number,
     minutes: Number,
   },
-  reviews: [
-    {
-      name: String,
-      text: String,
-    },
-  ],
+  reviews: [{}],
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
-
 module.exports = Movie;
